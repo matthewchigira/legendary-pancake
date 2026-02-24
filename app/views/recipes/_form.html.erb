@@ -1,0 +1,135 @@
+<style>
+  .recipe-form {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid var(--border);
+    max-width: 700px;
+  }
+  .recipe-form .form-group {
+    margin-bottom: 1rem;
+  }
+  .recipe-form .form-group label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  .recipe-form .form-group input,
+  .recipe-form .form-group select,
+  .recipe-form .form-group textarea {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+  }
+  .recipe-form .form-group textarea { resize: vertical; min-height: 100px; }
+  .form-row {
+    display: flex;
+    gap: 1rem;
+  }
+  .form-row .form-group { flex: 1; }
+  .ingredients-fields {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: var(--cream);
+    border-radius: 8px;
+  }
+  .ingredients-fields h4 {
+    margin-bottom: 0.75rem;
+    color: var(--dark-brown);
+  }
+  .ingredient-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  .ingredient-row input { flex: 1; padding: 0.4rem 0.6rem; border: 1px solid var(--border); border-radius: 4px; font-size: 0.85rem; }
+  .ingredient-row .remove-link { color: #dc3545; text-decoration: none; font-weight: bold; }
+  .form-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  .error-messages {
+    background: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+  }
+</style>
+
+<div class="recipe-form">
+  <% if recipe.errors.any? %>
+    <div class="error-messages">
+      <strong><%= pluralize(recipe.errors.count, "error") %> prohibited this recipe from being saved:</strong>
+      <ul>
+        <% recipe.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= form_with(model: recipe) do |f| %>
+    <div class="form-group">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :description %>
+      <%= f.text_area :description %>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :difficulty %>
+        <%= f.select :difficulty, [["Easy", "easy"], ["Medium", "medium"], ["Hard", "hard"]], prompt: "Select difficulty" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :servings %>
+        <%= f.number_field :servings, min: 1 %>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <%= f.label :prep_time_minutes, "Prep Time (min)" %>
+        <%= f.number_field :prep_time_minutes, min: 1 %>
+      </div>
+      <div class="form-group">
+        <%= f.label :cook_time_minutes, "Cook Time (min)" %>
+        <%= f.number_field :cook_time_minutes, min: 1 %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :image_url, "Image URL" %>
+      <%= f.url_field :image_url %>
+    </div>
+
+    <div class="ingredients-fields">
+      <h4>Ingredients</h4>
+      <%= f.fields_for :ingredients do |ingredient_form| %>
+        <div class="ingredient-row">
+          <%= ingredient_form.text_field :quantity, placeholder: "Qty" %>
+          <%= ingredient_form.text_field :unit, placeholder: "Unit" %>
+          <%= ingredient_form.text_field :name, placeholder: "Ingredient name" %>
+          <%= ingredient_form.check_box :_destroy, style: "display:none" %>
+          <%= link_to "×", "#", class: "remove-link", onclick: "this.previousElementSibling.checked=true;this.parentElement.style.display='none';return false;" %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit class: "btn btn-primary" %>
+      <%= link_to "Cancel", recipes_path, class: "btn btn-secondary" %>
+    </div>
+  <% end %>
+</div>

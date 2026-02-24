@@ -1,0 +1,174 @@
+<style>
+  .recipe-detail {
+    background: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .recipe-detail h2 {
+    color: var(--dark-brown);
+    margin-bottom: 0.5rem;
+    font-size: 1.75rem;
+  }
+  .recipe-detail .meta-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    font-size: 0.9rem;
+    color: #666;
+  }
+  .recipe-detail .description {
+    margin: 1rem 0;
+    line-height: 1.6;
+  }
+  .recipe-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+  .ingredients-section, .reviews-section {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+  .ingredients-section h3, .reviews-section h3 {
+    color: var(--dark-brown);
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+  .ingredients-list { list-style: none; }
+  .ingredients-list li {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid #f0e6d0;
+  }
+  .ingredients-list li:last-child { border-bottom: none; }
+  .review-card {
+    padding: 1rem 0;
+    border-bottom: 1px solid #f0e6d0;
+  }
+  .review-card:last-child { border-bottom: none; }
+  .review-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  .review-author { font-weight: 600; color: var(--dark-brown); }
+  .review-rating { color: var(--golden); }
+  .review-comment { font-size: 0.9rem; color: #555; }
+  .review-form {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--border);
+  }
+  .review-form h4 {
+    color: var(--dark-brown);
+    margin-bottom: 1rem;
+  }
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  .form-group label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+  }
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+  }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .star { font-size: 1.1rem; }
+</style>
+
+<% cache @recipe do %>
+  <div class="recipe-detail">
+    <h2><%= @recipe.name %></h2>
+    <div class="meta-row">
+      <span class="badge badge-<%= @recipe.difficulty %>"><%= @recipe.difficulty %></span>
+      <% if @recipe.prep_time_minutes %>
+        <span>Prep: <%= @recipe.prep_time_minutes %> min</span>
+      <% end %>
+      <% if @recipe.cook_time_minutes %>
+        <span>Cook: <%= @recipe.cook_time_minutes %> min</span>
+      <% end %>
+      <% if @recipe.total_time_minutes > 0 %>
+        <span>Total: <%= @recipe.total_time_minutes %> min</span>
+      <% end %>
+      <% if @recipe.servings %>
+        <span>Servings: <%= @recipe.servings %></span>
+      <% end %>
+      <span>Rating: <%= @recipe.average_rating %>/5</span>
+    </div>
+    <div class="description"><%= simple_format @recipe.description %></div>
+    <div class="recipe-actions">
+      <%= link_to "Edit", edit_recipe_path(@recipe), class: "btn btn-secondary" %>
+      <%= button_to "Delete", @recipe, method: :delete, class: "btn btn-danger", data: { turbo_confirm: "Are you sure?" } %>
+      <%= link_to "Back to Recipes", recipes_path, class: "btn btn-secondary" %>
+    </div>
+  </div>
+
+  <div class="ingredients-section">
+    <h3>Ingredients</h3>
+    <% if @recipe.ingredients.any? %>
+      <ul class="ingredients-list">
+        <% @recipe.ingredients.each do |ingredient| %>
+          <li><strong><%= ingredient.quantity %> <%= ingredient.unit %></strong> <%= ingredient.name %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p style="color: #888;">No ingredients listed.</p>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="reviews-section">
+  <h3>Reviews (<%= @recipe.reviews.count %>)</h3>
+  <% @recipe.reviews.order(created_at: :desc).each do |review| %>
+    <div class="review-card">
+      <div class="review-header">
+        <span class="review-author"><%= review.author_name %></span>
+        <span class="review-rating">
+          <% review.rating.times do %><span class="star">&#9733;</span><% end %>
+          <% (5 - review.rating).times do %><span class="star" style="color:#ccc;">&#9733;</span><% end %>
+        </span>
+      </div>
+      <div class="review-comment"><%= review.comment %></div>
+    </div>
+  <% end %>
+
+  <div class="review-form">
+    <h4>Write a Review</h4>
+    <%= form_with(model: [@recipe, @review]) do |f| %>
+      <% if @review.errors.any? %>
+        <div class="flash flash-alert" style="margin-bottom: 1rem;">
+          <% @review.errors.full_messages.each do |msg| %>
+            <div><%= msg %></div>
+          <% end %>
+        </div>
+      <% end %>
+      <div class="form-group">
+        <%= f.label :author_name, "Your Name" %>
+        <%= f.text_field :author_name %>
+      </div>
+      <div class="form-group">
+        <%= f.label :rating %>
+        <%= f.select :rating, (1..5).to_a.reverse, prompt: "Select rating" %>
+      </div>
+      <div class="form-group">
+        <%= f.label :comment %>
+        <%= f.text_area :comment %>
+      </div>
+      <%= f.submit "Submit Review", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
