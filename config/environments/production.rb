@@ -50,9 +50,8 @@ Rails.application.configure do
   redis_url = ENV.fetch("CACHE_TO_GO_URL", "redis://localhost:6379/1")
   config.cache_store = :redis_cache_store, { url: redis_url }
 
-  # Replace the default in-process and non-durable queuing backend for Active Job.
-  config.active_job.queue_adapter = :solid_queue
-  config.solid_queue.connects_to = { database: { writing: :queue } }
+  # Use inline job processing (no separate worker needed)
+  config.active_job.queue_adapter = :async
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
