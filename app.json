@@ -1,0 +1,88 @@
+{
+  "name": "legendary-pancake-staging",
+  "description": "",
+  "keywords": [
+    "build",
+    "build.io"
+  ],
+  "website": "https://small-sharp-tool.com/",
+  "repository": "git@github.com:matthewchigira/legendary-pancake.git",
+  "logo": "",
+  "success_url": "/",
+  "stack": "heroku-24",
+  "scripts": {
+    "postdeploy": ""
+  },
+  "env": {
+    "CACHE_TO_GO_TLS_URL": {
+      "description": "A description of this variable",
+      "generator": "secret|none",
+      "required": "true|false",
+      "value": "the initial value of the variable"
+    },
+    "CACHE_TO_GO_URL": {
+      "description": "A description of this variable",
+      "generator": "secret|none",
+      "required": "true|false",
+      "value": "the initial value of the variable"
+    },
+    "SCHEMA_TO_GO_URL": {
+      "description": "A description of this variable",
+      "generator": "secret|none",
+      "required": "true|false",
+      "value": "the initial value of the variable"
+    }
+  },
+  "formation": {
+    "web": {
+      "size": "Standard-1X",
+      "display": "bash -c bundle exec puma -C config/puma.rb",
+      "quantity": 1
+    },
+    "rake": {
+      "size": "Standard-1X",
+      "display": "bash -c bundle exec rake",
+      "quantity": 0
+    },
+    "console": {
+      "size": "Standard-1X",
+      "display": "bash -c bin/rails console",
+      "quantity": 0
+    },
+    "release": {
+      "size": "Standard-1X",
+      "display": "bash -c bundle exec rails db:migrate",
+      "quantity": 0
+    }
+  },
+  "image": "deprecated--see formation->type->image",
+  "addons": [
+    "schema-to-go:basic",
+    "cache-to-go:mini"
+  ],
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-ruby"
+    }
+  ],
+  "hosts": [],
+  "policy": {
+    "allow_websockets": true,
+    "response_timeout": 30,
+    "max_connections": 1024,
+    "temporary_self_signed": true,
+    "share_process_namespace": true,
+    "erosion_resistance_seconds": 0,
+    "waf": false,
+    "tls_passthrough": false,
+    "build_cache": null
+  },
+  "environments": {
+    "test": {
+      "scripts": {
+        "test": "echo 'Testing...'",
+        "test-setup": "echo 'Setting up test environment...'"
+      }
+    }
+  }
+}
