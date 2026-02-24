@@ -1,1 +1,18 @@
 tmp/*
+
+# Rails master key
+config/master.key
+
+# Environment-specific credentials
+config/credentials/*.key
+
+# Logs
+log/*
+
+# Storage
+storage/*
+
+# Node/bundler
+/node_modules
+/.bundle
+/vendor/bundle
