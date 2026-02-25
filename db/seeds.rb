@@ -2,12 +2,11 @@ require "faker"
 
 puts "Seeding database..."
 
-PANCAKE_ADJECTIVES = %w[
-  Fluffy Crispy Golden Legendary Epic Mythical Classic Grandma's Heavenly
-  Supreme Ultimate Perfect Rustic Artisan Gourmet Decadent Towering
-  Buttery Maple Blueberry Chocolate Banana Cinnamon Lemon Strawberry
-  Nutella Pumpkin Apple Pecan Coconut Matcha Lavender Honey Oat
-  Buckwheat Sourdough Protein Ancient Whole\ Wheat Cornmeal Ricotta
+RECIPE_STYLES = %w[
+  Modern Classic Elegant Refined Artisan Gourmet Signature Craft
+  Fusion Contemporary Heritage Seasonal Fresh Minimal Pure
+  Bold Vibrant Curated Urban Coastal Mediterranean
+  Nordic Japanese Thai Korean French Italian
 ].freeze
 
 DIFFICULTIES = %w[easy medium hard].freeze
@@ -17,18 +16,24 @@ UNITS = %w[cup cups tsp tbsp oz g ml lb pinch dash whole].freeze
 INGREDIENT_NAMES = %w[
   flour sugar milk eggs butter salt baking\ powder baking\ soda
   vanilla\ extract cinnamon nutmeg maple\ syrup honey buttermilk
-  cream\ cheese ricotta yogurt coconut\ oil vegetable\ oil
-  lemon\ juice blueberries strawberries bananas chocolate\ chips
-  cocoa\ powder whipped\ cream pecans walnuts oats cornmeal
+  cream\ cheese ricotta yogurt coconut\ oil olive\ oil
+  lemon\ juice garlic shallots thyme rosemary basil
+  parmesan mozzarella heavy\ cream chicken\ stock sea\ salt
+].freeze
+
+DISH_TYPES = [
+  "Bowl", "Risotto", "Pasta", "Salad", "Tartine", "Brûlée",
+  "Soufflé", "Tart", "Ramen", "Curry", "Stir-Fry", "Grain Bowl",
+  "Flatbread", "Crostini", "Poke Bowl", "Tagine", "Bisque"
 ].freeze
 
 Recipe.destroy_all
 
 100.times do |i|
-  adjective = PANCAKE_ADJECTIVES.sample
-  style = ["Pancakes", "Pancake Stack", "Flapjacks", "Hotcakes", "Griddle Cakes"].sample
+  style = RECIPE_STYLES.sample
+  dish = DISH_TYPES.sample
   recipe = Recipe.create!(
-    name: "#{adjective} #{style}",
+    name: "#{style} #{dish}",
     description: Faker::Lorem.paragraph(sentence_count: rand(3..6)),
     difficulty: DIFFICULTIES.sample,
     prep_time_minutes: rand(5..30),

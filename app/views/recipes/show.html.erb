@@ -1,28 +1,31 @@
 <style>
   .recipe-detail {
-    background: white;
-    border-radius: 10px;
+    background: var(--surface);
+    border-radius: 12px;
     padding: 2rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     border: 1px solid var(--border);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
   .recipe-detail h2 {
-    color: var(--dark-brown);
+    color: var(--slate-900);
     margin-bottom: 0.5rem;
     font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.025em;
   }
   .recipe-detail .meta-row {
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
     margin-bottom: 1rem;
     flex-wrap: wrap;
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 0.85rem;
+    color: var(--slate-500);
+    align-items: center;
   }
   .recipe-detail .description {
     margin: 1rem 0;
-    line-height: 1.6;
+    line-height: 1.7;
+    color: var(--slate-700);
   }
   .recipe-actions {
     display: flex;
@@ -30,27 +33,28 @@
     margin-top: 1.5rem;
   }
   .ingredients-section, .reviews-section {
-    background: white;
-    border-radius: 10px;
+    background: var(--surface);
+    border-radius: 12px;
     padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     border: 1px solid var(--border);
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
   }
   .ingredients-section h3, .reviews-section h3 {
-    color: var(--dark-brown);
+    color: var(--slate-900);
     margin-bottom: 1rem;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
+    font-weight: 600;
   }
   .ingredients-list { list-style: none; }
   .ingredients-list li {
-    padding: 0.4rem 0;
-    border-bottom: 1px solid #f0e6d0;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--slate-100);
+    font-size: 0.9rem;
   }
   .ingredients-list li:last-child { border-bottom: none; }
   .review-card {
     padding: 1rem 0;
-    border-bottom: 1px solid #f0e6d0;
+    border-bottom: 1px solid var(--slate-100);
   }
   .review-card:last-child { border-bottom: none; }
   .review-header {
@@ -58,17 +62,18 @@
     justify-content: space-between;
     margin-bottom: 0.5rem;
   }
-  .review-author { font-weight: 600; color: var(--dark-brown); }
-  .review-rating { color: var(--golden); }
-  .review-comment { font-size: 0.9rem; color: #555; }
+  .review-author { font-weight: 600; color: var(--slate-900); }
+  .review-rating { color: var(--primary); }
+  .review-comment { font-size: 0.9rem; color: var(--slate-500); line-height: 1.5; }
   .review-form {
     margin-top: 1.5rem;
     padding-top: 1.5rem;
-    border-top: 2px solid var(--border);
+    border-top: 1px solid var(--border);
   }
   .review-form h4 {
-    color: var(--dark-brown);
+    color: var(--slate-900);
     margin-bottom: 1rem;
+    font-weight: 600;
   }
   .form-group {
     margin-bottom: 1rem;
@@ -77,14 +82,21 @@
     display: block;
     margin-bottom: 0.3rem;
     font-weight: 500;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    color: var(--slate-700);
   }
   .form-group input, .form-group select, .form-group textarea {
     width: 100%;
     padding: 0.5rem 0.75rem;
     border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.9rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    transition: border-color 0.15s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
   }
   .form-group textarea { resize: vertical; min-height: 80px; }
   .star { font-size: 1.1rem; }
