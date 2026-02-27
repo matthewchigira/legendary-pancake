@@ -1,4 +1,4 @@
-# Legendary Pancake
+# Legendary Pancake Updated
 
 A community pancake recipe sharing platform (the best!) built with Ruby on Rails 8. Browse, create, edit, and delete pancake recipes complete with ingredients and user reviews.
 
